@@ -1,6 +1,8 @@
 package xyz.dicky99.server;
 
 import xyz.dicky99.rpc.api.HelloService;
+import xyz.dicky99.rpc.registry.DefaultServiceRegistry;
+import xyz.dicky99.rpc.registry.ServiceRegistry;
 import xyz.dicky99.rpc.server.RpcServer;
 
 /**
@@ -12,7 +14,9 @@ import xyz.dicky99.rpc.server.RpcServer;
 public class MyServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-        RpcServer rpcServer = new RpcServer();
-        rpcServer.register(helloService, 9000);
+        ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
+        serviceRegistry.register(helloService);
+        RpcServer rpcServer = new RpcServer(serviceRegistry);
+        rpcServer.start(9000);
     }
 }
