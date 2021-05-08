@@ -13,6 +13,7 @@ import xyz.dicky99.rpc.RpcServer;
 import xyz.dicky99.rpc.codec.CommonDecoder;
 import xyz.dicky99.rpc.codec.CommonEncoder;
 import xyz.dicky99.rpc.serializer.JsonSerializer;
+import xyz.dicky99.rpc.serializer.KryoSerializer;
 
 /**
  * @author Ysj
@@ -40,7 +41,7 @@ public class MyNettyServer implements RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new CommonEncoder(new JsonSerializer()));
+                            pipeline.addLast(new CommonEncoder(new KryoSerializer()));
                             pipeline.addLast(new CommonDecoder());
                             pipeline.addLast(new NettyServerHandler());
                         }

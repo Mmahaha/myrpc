@@ -32,7 +32,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest msg) throws Exception {
         try {
-            logger.info("服务器接收到请求: {}", msg);
+            logger.info("服务器接收到客户端[{}]请求, msg内容[{}]",ctx.channel().remoteAddress().toString() ,msg);
             String interfaceName = msg.getInterfaceName();
             Object service = serviceRegistry.getService(interfaceName);
             Object result = requestHandler.handle(msg, service);
@@ -48,4 +48,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
         cause.printStackTrace();
         ctx.close();
     }
+
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("检测到客户端通道注册，地址为:" + ctx.channel().remoteAddress().toString());
+    }
 }
+
+
