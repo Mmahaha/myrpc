@@ -10,4 +10,6 @@ import java.io.Serializable;
 public class HelloObject implements Serializable {
     private Integer id;
     private String message;
+
+    public HelloObject(){}
 }

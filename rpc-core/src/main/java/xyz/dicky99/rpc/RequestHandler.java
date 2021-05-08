@@ -1,4 +1,4 @@
-package xyz.dicky99.rpc.server;
+package xyz.dicky99.rpc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

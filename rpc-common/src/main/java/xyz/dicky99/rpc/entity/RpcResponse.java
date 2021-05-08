@@ -13,13 +13,16 @@ import java.io.Serializable;
  */
 @Data
 public class RpcResponse<T> implements Serializable {
+
+    public RpcResponse() {}
+
     /**
      * 响应状态码
      */
     private Integer statusCode;
 
     /**
-     * 响应状态的补充信息
+     * 响应状态补充信息
      */
     private String message;
 
@@ -28,19 +31,18 @@ public class RpcResponse<T> implements Serializable {
      */
     private T data;
 
-    //定义调用成功返回的状态码及返回的数据
-    public static <T> RpcResponse<T> success(T data){
+    public static <T> RpcResponse<T> success(T data) {
         RpcResponse<T> response = new RpcResponse<>();
         response.setStatusCode(ResponseCode.SUCCESS.getCode());
         response.setData(data);
         return response;
     }
 
-    //定义调用失败后返回的状态码及状态信息
-    public static <T> RpcResponse<T> fail(ResponseCode code){
+    public static <T> RpcResponse<T> fail(ResponseCode code) {
         RpcResponse<T> response = new RpcResponse<>();
         response.setStatusCode(code.getCode());
         response.setMessage(code.getMessage());
         return response;
     }
+
 }

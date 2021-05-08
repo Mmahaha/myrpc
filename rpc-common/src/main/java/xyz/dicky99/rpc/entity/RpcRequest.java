@@ -1,5 +1,6 @@
 package xyz.dicky99.rpc.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.io.Serializable;
  */
 
 @Data
-@Builder
+@AllArgsConstructor
 public class RpcRequest implements Serializable {
     /**
      * 待调用接口的名称
@@ -33,4 +34,6 @@ public class RpcRequest implements Serializable {
      * 调用方法时所需参数的类型
      */
     private Class<?>[] paramTypes;
+
+    public RpcRequest(){}
 }
