@@ -1,6 +1,9 @@
 package xyz.dicky99.rpc;
 
-import netty.client.MyNettyClient;
+import xyz.dicky99.rpc.serializer.ProtobufSerializer;
+import xyz.dicky99.rpc.transport.netty.client.MyNettyClient;
+import xyz.dicky99.rpc.transport.RpcClient;
+import xyz.dicky99.rpc.transport.RpcClientProxy;
 import xyz.dicky99.rpc.api.HelloObject;
 import xyz.dicky99.rpc.api.HelloService;
 
@@ -12,11 +15,13 @@ import xyz.dicky99.rpc.api.HelloService;
  */
 public class NettyTestClient {
     public static void main(String[] args) {
-        RpcClient client = new MyNettyClient("127.0.0.1", 9999);
+        RpcClient client = new MyNettyClient();
+        client.setSerializer(new ProtobufSerializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
         HelloObject object = new HelloObject(12, "This is a message");
         String res = helloService.hello(object);
         System.out.println(res);
+
     }
 }

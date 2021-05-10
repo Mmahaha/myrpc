@@ -17,7 +17,14 @@ import java.util.List;
 /**
  * @author Ysj
  * @version 1.0
- * @description 通用解码器
+ * @description 通用解码器，自定义协议格式如下
+   +---------------+---------------+-----------------+-------------+
+   |  Magic Number |  Package Type | Serializer Type | Data Length |
+   |    4 bytes    |    4 bytes    |     4 bytes     |   4 bytes   |
+   +---------------+---------------+-----------------+-------------+
+   |                          Data Bytes                           |
+   |                   Length: ${Data Length}                      |
+   +---------------------------------------------------------------+
  * @date 2021/5/8 9:28
  */
 public class CommonDecoder extends ReplayingDecoder {

@@ -3,6 +3,8 @@ package xyz.dicky99.rpc.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
@@ -15,6 +17,11 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class RpcRequest implements Serializable {
+    /**
+     * 请求号,通过UUID生成
+     */
+    private String requestId;
+
     /**
      * 待调用接口的名称
      */

@@ -1,13 +1,7 @@
-package xyz.dicky99.rpc;
+package xyz.dicky99.rpc.transport;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import xyz.dicky99.rpc.entity.RpcRequest;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import xyz.dicky99.rpc.serializer.CommonSerializer;
 
 /**
  * @author Ysj
@@ -19,5 +13,6 @@ import java.net.Socket;
 public interface RpcClient {
 
     Object sendRequest(RpcRequest rpcRequest);
+    void setSerializer(CommonSerializer serializer);
 
 }

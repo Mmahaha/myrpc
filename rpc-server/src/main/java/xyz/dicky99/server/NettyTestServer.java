@@ -1,9 +1,8 @@
 package xyz.dicky99.server;
 
-import netty.server.MyNettyServer;
+import xyz.dicky99.rpc.serializer.ProtobufSerializer;
+import xyz.dicky99.rpc.transport.netty.server.MyNettyServer;
 import xyz.dicky99.rpc.api.HelloService;
-import xyz.dicky99.rpc.registry.DefaultServiceRegistry;
-import xyz.dicky99.rpc.registry.ServiceRegistry;
 
 /**
  * @author Ysj
@@ -14,9 +13,8 @@ import xyz.dicky99.rpc.registry.ServiceRegistry;
 public class NettyTestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-        ServiceRegistry registry = new DefaultServiceRegistry();
-        registry.register(helloService);
-        MyNettyServer server = new MyNettyServer();
-        server.start(9999);
+        MyNettyServer server = new MyNettyServer("127.0.0.1", 9999);
+        server.setSerializer(new ProtobufSerializer());
+        server.publishService(helloService, HelloService.class);
     }
 }

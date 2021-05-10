@@ -10,7 +10,14 @@ import xyz.dicky99.rpc.serializer.CommonSerializer;
 /**
  * @author Ysj
  * @version 1.0
- * @description TODO
+ * @description 此处为自定义编码器，协议包格式如下
+   +---------------+---------------+-----------------+-------------+
+   |  Magic Number |  Package Type | Serializer Type | Data Length |
+   |    4 bytes    |    4 bytes    |     4 bytes     |   4 bytes   |
+   +---------------+---------------+-----------------+-------------+
+   |                          Data Bytes                           |
+   |                   Length: ${Data Length}                      |
+   +---------------------------------------------------------------+
  * @date 2021/5/8 9:21
  */
 public class CommonEncoder extends MessageToByteEncoder {
