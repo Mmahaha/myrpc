@@ -68,7 +68,7 @@ public class MyNettyClient implements RpcClient {
                     }
                 });
                 channel.closeFuture().sync();
-                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse"); // + rpcRequest.getRequestId()
+                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse$" + rpcRequest.getRequestId());
                 RpcResponse rpcResponse = channel.attr(key).get();
                 RpcMessageChecker.check(rpcRequest, rpcResponse);
                 result.set(rpcResponse.getData());

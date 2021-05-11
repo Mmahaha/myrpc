@@ -14,14 +14,17 @@ import xyz.dicky99.rpc.api.HelloService;
  * @date 2021/5/8 9:40
  */
 public class NettyTestClient {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         RpcClient client = new MyNettyClient();
         client.setSerializer(new ProtobufSerializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        HelloObject object = new HelloObject(12, "This is a message");
-        String res = helloService.hello(object);
-        System.out.println(res);
+        for (int i = 0; i < 5; i++) {
+            HelloObject object = new HelloObject(i, "This is a message" + i);
+            String res = helloService.hello(object);
+            System.out.println(i + " " + res + "\n");
+            Thread.sleep(3 * 1000);
+        }
 
     }
 }

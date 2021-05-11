@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.dicky99.rpc.enumeraion.RpcError;
 import xyz.dicky99.rpc.exception.RpcException;
+import xyz.dicky99.rpc.loadbalancer.LoadBalancer;
+import xyz.dicky99.rpc.loadbalancer.RoundRobinLoadBalancer;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -18,10 +20,11 @@ import java.util.List;
  * @description TODO
  * @date 2021/5/10 11:06
  */
+
 public class NacosServiceRegistry implements ServiceRegistry {
 
     private static final Logger logger = LoggerFactory.getLogger(NacosServiceRegistry.class);
-
+    private LoadBalancer loadBalancer;
     private static final String SERVER_ADDR = "127.0.0.1:8848";
     private static final NamingService namingService;
 
@@ -32,6 +35,15 @@ public class NacosServiceRegistry implements ServiceRegistry {
             logger.error("连接到nacos时发生错误：", e);
             throw new RpcException(RpcError.FAILED_TO_CONNECT_TO_SERVICE_REGISTRY);
         }
+    }
+
+    public NacosServiceRegistry(LoadBalancer loadBalancer) {
+        if(loadBalancer == null) this.loadBalancer = new RoundRobinLoadBalancer();
+        else this.loadBalancer = loadBalancer;
+    }
+
+    public NacosServiceRegistry() { //无参默认实现轮转算法
+        loadBalancer = new RoundRobinLoadBalancer();
     }
 
     @Override
@@ -49,7 +61,8 @@ public class NacosServiceRegistry implements ServiceRegistry {
         List<Instance> instances = null;
         try {
             instances = namingService.getAllInstances(serviceName);
-            Instance instance = instances.get(0);   //负载均衡
+            logger.info("当前服务器实例数{}",instances.size());
+            Instance instance = loadBalancer.select(instances);   //负载均衡
             return new InetSocketAddress(instance.getIp(), instance.getPort());
         } catch (NacosException e) {
             logger.error("获取服务时发生错误", e);
