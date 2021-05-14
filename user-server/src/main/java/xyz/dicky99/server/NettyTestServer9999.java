@@ -1,6 +1,6 @@
 package xyz.dicky99.server;
 
-import xyz.dicky99.rpc.serializer.ProtobufSerializer;
+import xyz.dicky99.rpc.serializer.ProtostuffSerializer;
 import xyz.dicky99.rpc.transport.netty.server.MyNettyServer;
 import xyz.dicky99.rpc.api.HelloService;
 
@@ -14,7 +14,7 @@ public class NettyTestServer9999 {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
         MyNettyServer server = new MyNettyServer("127.0.0.1", 9999);
-        server.setSerializer(new ProtobufSerializer());
-        server.publishService(helloService, HelloService.class);
+        server.setSerializer(new ProtostuffSerializer());
+//        server.publishService(helloService, HelloService.class);
     }
 }

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
 import java.util.concurrent.*;
 
 /**
@@ -25,7 +26,7 @@ import java.util.concurrent.*;
  * @description Socket方式远程方法调用的提供者
  * @date 2021/5/8 8:58
  */
-public class SocketServer implements RpcServer {
+public class SocketServer implements RpcServer{
 
     private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
@@ -46,18 +47,20 @@ public class SocketServer implements RpcServer {
         this.serviceProvider = new ServiceProviderImpl();
     }
 
-    @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
+    public <T> void publishService(Map<Object, Class> serviceMap) {
         if(serializer == null) {
             logger.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        serviceProvider.addServiceProvider(service);
-        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
+
+        for(Map.Entry<Object, Class> entry : serviceMap.entrySet() ){
+            serviceProvider.addServiceProvider(entry.getKey());
+            serviceRegistry.register(entry.getValue().getCanonicalName(), new InetSocketAddress(host, port));
+        }
         start();
     }
 
-    @Override
+
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("服务器启动……");
@@ -72,7 +75,6 @@ public class SocketServer implements RpcServer {
         }
     }
 
-    @Override
     public void setSerializer(CommonSerializer serializer) {
         this.serializer = serializer;
     }

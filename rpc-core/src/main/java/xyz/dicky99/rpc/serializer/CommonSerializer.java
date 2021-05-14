@@ -20,7 +20,7 @@ public interface CommonSerializer {
             case 1:
                 return new JsonSerializer();
             case 3:
-                return new ProtobufSerializer();
+                return new ProtostuffSerializer();
             default:
                 return null;
         }

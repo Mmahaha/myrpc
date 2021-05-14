@@ -17,16 +17,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * @description TODO
  * @date 2021/5/10 12:09
  */
-public class ProtobufSerializer implements CommonSerializer {
+public class ProtostuffSerializer implements CommonSerializer {
 
-    private Logger logger = LoggerFactory.getLogger(ProtobufSerializer.class);
+    private Logger logger = LoggerFactory.getLogger(ProtostuffSerializer.class);
     private LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
     private Map<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
 
     @Override
     @SuppressWarnings("unchecked")
     public byte[] serialize(Object obj) {
-        logger.info("使用protobuf进行序列化");
+        logger.info("---------使用ProtoStuff进行序列化---------");
         Class clazz = obj.getClass();
         Schema schema = getSchema(clazz);
         byte[] data;
@@ -41,7 +41,7 @@ public class ProtobufSerializer implements CommonSerializer {
     @Override
     @SuppressWarnings("unchecked")
     public Object deserialize(byte[] bytes, Class<?> clazz) {
-        logger.info("使用protobuf进行反序列化");
+        logger.info("---------使用ProtoStuff进行反序列化---------");
         Schema schema = getSchema(clazz);
         Object obj = schema.newMessage();
         ProtostuffIOUtil.mergeFrom(bytes, obj, schema);

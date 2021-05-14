@@ -3,6 +3,9 @@ package xyz.dicky99.rpc.transport;
 
 import xyz.dicky99.rpc.serializer.CommonSerializer;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author Ysj
  * @version 1.0
@@ -11,6 +14,6 @@ import xyz.dicky99.rpc.serializer.CommonSerializer;
  */
 public interface RpcServer {
     void start();
-    <T> void publishService(Object service, Class<T> serviceClass);
+    <T> void publishService(Map<Object, Class> serviceMap);
     void setSerializer(CommonSerializer serializer);
 }

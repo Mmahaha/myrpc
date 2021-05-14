@@ -14,6 +14,7 @@ import java.io.Serializable;
  * @date 2021/5/7 16:25
  */
 
+@Builder
 @Data
 @AllArgsConstructor
 public class RpcRequest implements Serializable {

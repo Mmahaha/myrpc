@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import xyz.dicky99.rpc.provider.ServiceProvider;
 import xyz.dicky99.rpc.provider.ServiceProviderImpl;
 import xyz.dicky99.rpc.registry.NacosServiceRegistry;
-import xyz.dicky99.rpc.serializer.ProtobufSerializer;
+import xyz.dicky99.rpc.serializer.ProtostuffSerializer;
 import xyz.dicky99.rpc.transport.RpcServer;
 import xyz.dicky99.rpc.codec.CommonDecoder;
 import xyz.dicky99.rpc.codec.CommonEncoder;
@@ -20,9 +20,10 @@ import xyz.dicky99.rpc.enumeraion.RpcError;
 import xyz.dicky99.rpc.exception.RpcException;
 import xyz.dicky99.rpc.registry.ServiceRegistry;
 import xyz.dicky99.rpc.serializer.CommonSerializer;
-import xyz.dicky99.rpc.serializer.KryoSerializer;
 
 import java.net.InetSocketAddress;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Ysj
@@ -45,13 +46,16 @@ public class MyNettyServer implements RpcServer {
         serviceProvider = new ServiceProviderImpl();
     }
 
-    public <T> void publishService(Object service, Class<T> serviceClass) {
+    public <T> void publishService(Map<Object, Class> serviceMap) {
         if(serializer == null) {
             logger.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        serviceProvider.addServiceProvider(service);
-        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
+
+        for(Map.Entry<Object, Class> entry : serviceMap.entrySet() ){
+            serviceProvider.addServiceProvider(entry.getKey());
+            serviceRegistry.register(entry.getValue().getCanonicalName(), new InetSocketAddress(host, port));
+        }
         start();
     }
 
@@ -73,7 +77,7 @@ public class MyNettyServer implements RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new CommonEncoder(new ProtobufSerializer()));
+                            pipeline.addLast(new CommonEncoder(new ProtostuffSerializer()));
                             pipeline.addLast(new CommonDecoder());
                             pipeline.addLast(new NettyServerHandler());
                         }
